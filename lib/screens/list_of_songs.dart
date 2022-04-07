@@ -1,10 +1,13 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:music_app/screens/player_route.dart';
 import 'package:music_app/utils/api_clients.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:music_app/utils/network_client.dart';
 import 'package:shake/shake.dart';
 import '../models/song.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 class ListOfSongs extends StatefulWidget {
   const ListOfSongs({Key? key}) : super(key: key);
@@ -17,7 +20,7 @@ class _ListOfSongsState extends State<ListOfSongs> {
   final int limit = 20;
   final String staticUrl =
       "https://itunes.apple.com/search?term=sonu+nigam&limit=20";
-  final String baseUrl = "https://itunes.apple.com/search?term=";
+  final String baseUrl = "${dotenv.env['BASE_URL']}";
 
   final AudioPlayer audioPlayer = AudioPlayer();
   final TextEditingController _controllerSearch = TextEditingController();
@@ -130,6 +133,9 @@ class _ListOfSongsState extends State<ListOfSongs> {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerRoute(songs[index])));
+          },
           leading: Image.network(songs[index].image),
           title: Text(songs[index].trackName),
           subtitle: Text(songs[index].artistName),

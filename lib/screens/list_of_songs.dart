@@ -1,15 +1,17 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:music_app/config/constants/api_path.dart';
+import 'package:music_app/config/constants/app_constant.dart';
 import 'package:music_app/screens/player_route.dart';
-import 'package:music_app/utils/api_clients.dart';
+import 'package:music_app/utils/services/api_clients.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:music_app/utils/network_client.dart';
+import 'package:music_app/utils/services/network_client.dart';
 import 'package:shake/shake.dart';
 import '../models/song.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
-class ListOfSongs extends StatefulWidget {
+class ListOfSongs extends StatefulWidget implements AppConstant {
   const ListOfSongs({Key? key}) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class _ListOfSongsState extends State<ListOfSongs> {
   final int limit = 20;
   final String staticUrl =
       "https://itunes.apple.com/search?term=sonu+nigam&limit=20";
-  final String baseUrl = "${dotenv.env['BASE_URL']}";
+  final String baseUrl = "${ApiPath.BASE_URL}/search?term=";
 
   final AudioPlayer audioPlayer = AudioPlayer();
   final TextEditingController _controllerSearch = TextEditingController();
@@ -99,7 +101,14 @@ class _ListOfSongsState extends State<ListOfSongs> {
       icon = Icons.pause;
       String message = "$songName is playing";
       _createFlushBar(message, 3, context);
-      await audioPlayer.play(songs[index].audio);
+      int result = await audioPlayer.play(songs[index].audio);
+
+      if(result == AppConstant.SUCCESS){ ///We can directly use SUCCESS because we implements the class
+        print("playing");
+      }else if(result == AppConstant.FAILURE){
+        print('not plaing');
+      }
+
     } else {
       playingIndex = -1;
       isPlaying = false;

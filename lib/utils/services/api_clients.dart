@@ -1,6 +1,6 @@
 import 'dart:convert' as jsonconvertor;
 import 'package:http/http.dart' as http;
-import '../models/song.dart';
+import '../../models/song.dart';
 
 // Object to JSon = serialization
 // Json to Object = Deserialization
